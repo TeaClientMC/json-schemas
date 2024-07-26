@@ -5,3 +5,7 @@
 ./result
 .direnv
 .devenv
+
+
+# macOS specific files
+.DS_Store
