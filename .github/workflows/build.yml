@@ -19,12 +19,12 @@ jobs:
                 fetch-depth: 1
             
             - name: Set up Python
-              uses: actions/setup-python@v4
+              uses: actions/setup-python@v5
               with:
                 python-version: '3.12.4'
 
             - name: Install Poetry
-              uses: abatilo/actions-poetry@v2
+              uses: abatilo/actions-poetry@v3
               with: 
                 poetry-version: '1.8.3'
             
@@ -33,7 +33,7 @@ jobs:
                 poetry config virtualenvs.in-project true
                 poetry config virtualenvs.in-project true --local
             
-            - uses: actions/cache@v3
+            - uses: actions/cache@v4
               name: Cache Poetry virtualenv
               with:
                 path: ./.venv
@@ -46,7 +46,7 @@ jobs:
               run: |
                 poetry run python configschema/main.py
             - name: Upload JSON Schema to Artifacts
-              uses: actions/upload-artifact@v3
+              uses: actions/upload-artifact@v4
               with:
                 name: configschemaJson
                 path: dist/configschema.json
