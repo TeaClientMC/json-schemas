@@ -10,7 +10,7 @@ on:
 
 jobs:
     build:
-        name: Build JSON Schema
+        name: Build JSON Schema and Upload to Artifacts
         runs-on: ubuntu-latest
         steps:
             - name: Check out the code

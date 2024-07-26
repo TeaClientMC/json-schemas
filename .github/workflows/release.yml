@@ -1,4 +1,4 @@
-name: Build JSON Schema
+name: Release
 
 on:
     push:
@@ -9,7 +9,7 @@ on:
 
 jobs:
     build:
-        name: Build JSON Schema
+        name: Build JSON Schema and Release
         runs-on: ubuntu-latest
         steps:
             - name: Check out the code
