@@ -49,10 +49,6 @@ jobs:
             - name: Generate A Release
               uses: softprops/action-gh-release@v2
               with:
-                body: |
-                    # Changelog v0.0.0
-                    ## Changes:
-                body_path: ${{ github.workspace }}-CHANGELOG.txt
                 files: |
                   dist/configschema.json
                   dist/configschema.json.sha256
