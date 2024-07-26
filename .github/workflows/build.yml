@@ -20,12 +20,24 @@ jobs:
             
             - name: Set up Python
               uses: actions/setup-python@v4
+
+            - name: Install Poetry
+              uses: abatilo/actions-poetry@v2
+            
+            - name: Setup a local virtual environment (if no poetry.toml file)
+              run: |
+                poetry config virtualenvs.in-project true
+                poetry config virtualenvs.in-project true --local
+            
+            - uses: actions/cache@v3
+              name: Cache Poetry virtualenv
               with:
-                python-version: '3.12.4'
+                path: ./.venv
+                key: venv-${{ hashFiles('poetry.lock') }}
 
             - name: Install dependencies
-              run: |
-                python -m poetry install      
+              run: python -m poetry install  
+            
             - name: Build JSON Schema
               run: |
                 poetry run python configschema/main.py
