@@ -1,17 +1,58 @@
-name: Release
+name: Build JSON Schema
 
-on: 
+on:
     push:
         branches:
             - 'main'
-        tags:
-            - 'release'
+        tags: 
+            - 'v*.*.*'
 
 jobs:
-    release:
-        name: Release
+    build:
+        name: Build JSON Schema
         runs-on: ubuntu-latest
         steps:
-            - name: Checkout code
-              uses: actions/checkout@v2
+            - name: Check out the code
+              uses: actions/checkout@v4
+              with:
+                fetch-depth: 1
             
+            - name: Set up Python
+              uses: actions/setup-python@v5
+              with:
+                python-version: '3.12.4'
+
+            - name: Install Poetry
+              uses: abatilo/actions-poetry@v3
+              with: 
+                poetry-version: '1.8.3'
+            
+            - name: Setup a local virtual environment (if no poetry.toml file)
+              run: |
+                poetry config virtualenvs.in-project true
+                poetry config virtualenvs.in-project true --local
+            
+            - uses: actions/cache@v4
+              name: Cache Poetry virtualenv
+              with:
+                path: ./.venv
+                key: venv-${{ hashFiles('poetry.lock') }}
+
+            - name: Install dependencies
+              run: poetry install  
+            
+            - name: Build JSON Schema
+              run: |
+                poetry run python configschema/main.py
+            - name: SHA256 Checksum
+              run: sha256sum dist/configschema.json > dist/configschema.json.sha256
+            - name: Generate A Release
+              uses: softprops/action-gh-release@v2
+              with:
+                body: |
+                    # Changelog v0.0.0
+                    ## Changes:
+                body_path: ${{ github.workspace }}-CHANGELOG.txt
+                files: |
+                  dist/configschema.json
+                  dist/configschema.json.sha256
