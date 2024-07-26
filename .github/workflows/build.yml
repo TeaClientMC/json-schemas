@@ -1,0 +1,17 @@
+name: Build JSON Schema
+
+on:
+    push:
+        branches:
+            - 'main'
+    pull_request:
+        branches:
+            - 'main'
+
+jobs:
+    build:
+        name: Build JSON Schema
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v2
