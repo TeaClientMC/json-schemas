@@ -2,10 +2,6 @@
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     devenv.url = "github:cachix/devenv";
-    fenix = {
-      url = "github:nix-community/fenix";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
   };
 
   outputs =
@@ -18,28 +14,30 @@
           config,
           self',
           inputs',
-          lib,
           pkgs,
           system,
           ...
         }:
         {
           devenv.shells.default = {
-            dotenv.enable = false;
-            packages = lib.optionals pkgs.stdenv.isDarwin (
-              with pkgs;
-              [
-                darwin.apple_sdk.frameworks.Security
-                darwin.apple_sdk.frameworks.SystemConfiguration
-              ]
-            );
-            languages.rust = {
+            dotenv.enable = true;
+            packages = with pkgs; [
+              stdenv.cc.cc.lib # required by Jupyter
+              (pkgs.python3.withPackages (python-pkgs: with python-pkgs; [
+                python-lsp-server
+                black
+                mypy
+                isort
+              ]))
+            ];
+            languages.python = {
               enable = true;
-              channel = "stable"; # or "nightly"
-              toolchain = {
-                rustc = pkgs.rustc-wasm32;
+              poetry = {
+                enable = true;
+                activate.enable = true;
+                install.enable = true;
+                install.allExtras = true;
               };
-              targets = [ "wasm32-unknown-unknown" ];
             };
           };
         };
