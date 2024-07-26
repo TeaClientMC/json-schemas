@@ -6,11 +6,7 @@ import json
 def main():
 
     builder = SchemaBuilder()
-
-    # Specify the path to your JSON file
     json_file_path = "./configschema/exampleConfig.json"
-
-    subprocess.run(["sh", "-c", f"ls"])
 
     try:
         # Read the JSON file and parse it into a Python dictionary
