@@ -54,4 +54,5 @@ jobs:
               with:
                 files: |
                   dist/*.json
-                  dist/shas.{zip,tar.gz}
+                  dist/shas.zip
+                  dist/shas.tar.gz
