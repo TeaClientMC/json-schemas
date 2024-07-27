@@ -6,7 +6,7 @@ import json
 def main():
 
     builder = SchemaBuilder()
-    json_file_path = "./configschema/exampleConfig.json"
+    json_file_path = "./jsonSchemas/exampleConfig.json"
 
     try:
         # Read the JSON file and parse it into a Python dictionary
