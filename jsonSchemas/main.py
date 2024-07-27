@@ -1,27 +1,42 @@
+import glob
+import os
 import subprocess
 from genson import SchemaBuilder
 import json
+import hashlib
 
 
 def main():
     try:
         subprocess.check_call(["sh", "-c", f"rm -rf ./dist"])
-        subprocess.run(["sh", "-c", f"mkdir ./dist"])
-        inputFile = {
-            "./jsonSchemas/examples/config.json",
-            "./jsonSchemas/examples/modsList.json",
-            "./jsonSchemas/examples/serverList.json",
-        }
-        outputFile = {
-            "configschema.json",
-            "modsList.json",
-            "serverList.json",
-        }
+        subprocess.check_call(["sh", "-c", f"rm -rf ./dist/shas"])
+        subprocess.run(["sh", "-c", f"mkdir -p ./dist"])
+        subprocess.run(["sh", "-c", f"mkdir -p ./dist/shas"])
+        input_dir = "./jsonSchemas/examples"
 
-        for input_file, output_file in zip(inputFile, outputFile):
-            genSchemaFromJsonFile(input_file, output_file)
+        # Get all JSON files from the examples directory
+        input_files = glob.glob(f"{input_dir}/*.json")
+        # Generate output filenames by replacing '.json' with 'Schema.json'
+        output_files = [
+            f"{os.path.splitext(os.path.basename(file))[0]}Schema"
+            for file in input_files
+        ]
+
+        for input_file, output_file in zip(input_files, output_files):
+            genSchemaFromJsonFile(input_file, output_file + ".json")
+            ShaHashGenerator(
+                f"./dist/{output_file}.json", f"./dist/shas/{output_file}.json.sha256"
+            )
     except Exception as e:
         print(f"An unexpected error occurred: {e}")
+
+
+def ShaHashGenerator(input_file, output_file):
+    with open(input_file, "rb") as f:
+        sha256_hash = hashlib.sha256(f.read()).hexdigest()
+
+    with open(output_file, "w") as f:
+        f.write(sha256_hash)
 
 
 def genSchemaFromJsonFile(inputFile, outputFile):
@@ -45,4 +60,5 @@ def genSchemaFromJsonFile(inputFile, outputFile):
         print(f"An unexpected error occurred while processing {json_file_path}: {e}")
 
 
-__main__ = main()
+if __name__ == "__main__":
+    main()
