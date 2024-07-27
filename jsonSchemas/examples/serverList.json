@@ -1,0 +1,12 @@
+{
+    "servers": [
+        {
+            "name": "Example Server",
+            "server_ip": "example-server.com",
+            "description": "Example server description",
+            "icon": "",
+            "banner": "",
+            "partnered": true
+        }
+    ]
+}

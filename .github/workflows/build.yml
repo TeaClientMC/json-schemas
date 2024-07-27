@@ -49,4 +49,4 @@ jobs:
               uses: actions/upload-artifact@v4
               with:
                 name: configschemaJson
-                path: dist/configschema.json
+                path: dist/*.json

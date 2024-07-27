@@ -4,19 +4,27 @@ import json
 
 
 def main():
-    subprocess.run(["sh", "-c", f"mkdir ./dist"])
-    inputFile = {
-        "./jsonSchemas/exampleConfig.json",
-    }
-    outputFile = {
-        "./dist/configschema.json",
-    }
+    try:
+        subprocess.check_call(["sh", "-c", f"rm -rf ./dist"])
+        subprocess.run(["sh", "-c", f"mkdir ./dist"])
+        inputFile = {
+            "./jsonSchemas/examples/config.json",
+            "./jsonSchemas/examples/modsList.json",
+            "./jsonSchemas/examples/serverList.json",
+        }
+        outputFile = {
+            "configschema.json",
+            "modsList.json",
+            "serverList.json",
+        }
 
-    for i in inputFile & outputFile:
-        JsonSchema(i, outputFile)
+        for input_file, output_file in zip(inputFile, outputFile):
+            genSchemaFromJsonFile(input_file, output_file)
+    except Exception as e:
+        print(f"An unexpected error occurred: {e}")
 
 
-def JsonSchema(inputFile, outputFile):
+def genSchemaFromJsonFile(inputFile, outputFile):
     builder = SchemaBuilder()
     json_file_path = inputFile
 
@@ -27,7 +35,6 @@ def JsonSchema(inputFile, outputFile):
         builder.add_object(data)
         builder.to_schema()
         schema = builder.to_json(indent=2)
-        subprocess.run(["sh", "-c", f"mkdir ./dist"])
         subprocess.run(["sh", "-c", f"echo '{schema}' > ./dist/{outputFile}"])
         print("Schema generated successfully!")
     except FileNotFoundError:

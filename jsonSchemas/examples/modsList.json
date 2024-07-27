@@ -1,0 +1,21 @@
+{
+    "mods": [
+        {
+            "name": "ExampleMod",
+            "author": "ExampleAuthor",
+            "git": "",
+            "licence": "",
+            "homepage": "https://optifine.net/",
+            "mc_version_reccomended": [
+                "mc-version"
+            ],
+            "description": "Example mod description"
+        }
+    ],
+    "blocked_mods": [
+        {
+            "name": "ExampleClient",
+            "reason": "Minecraft Client"
+        }
+    ]
+}

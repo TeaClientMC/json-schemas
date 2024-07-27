@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "jsonSchemas"
-version = "0.1.0"
+version = "0.1.1"
 description = "A ConfigSchema Generator for TeaClient"
 authors = ["eveeifyeve <eveeg1971@gmail.com>"]
 license = "BSD-3"
