@@ -4,9 +4,21 @@ import json
 
 
 def main():
+    subprocess.run(["sh", "-c", f"mkdir ./dist"])
+    inputFile = {
+        "./jsonSchemas/exampleConfig.json",
+    }
+    outputFile = {
+        "./dist/configschema.json",
+    }
 
+    for i in inputFile & outputFile:
+        JsonSchema(i, outputFile)
+
+
+def JsonSchema(inputFile, outputFile):
     builder = SchemaBuilder()
-    json_file_path = "./jsonSchemas/exampleConfig.json"
+    json_file_path = inputFile
 
     try:
         # Read the JSON file and parse it into a Python dictionary
@@ -16,7 +28,7 @@ def main():
         builder.to_schema()
         schema = builder.to_json(indent=2)
         subprocess.run(["sh", "-c", f"mkdir ./dist"])
-        subprocess.run(["sh", "-c", f"echo '{schema}' > ./dist/configschema.json"])
+        subprocess.run(["sh", "-c", f"echo '{schema}' > ./dist/{outputFile}"])
         print("Schema generated successfully!")
     except FileNotFoundError:
         print(f"The file {json_file_path} was not found.")
