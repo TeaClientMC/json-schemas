@@ -44,7 +44,7 @@ jobs:
             
             - name: Build JSON Schema
               run: |
-                poetry run python configschema/main.py
+                poetry run python jsonSchemas/main.py
             - name: Upload JSON Schema to Artifacts
               uses: actions/upload-artifact@v4
               with:

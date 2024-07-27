@@ -6,6 +6,7 @@ on:
             - 'main'
         tags: 
             - 'v*.*.*'
+    workflow_dispatch:
 
 jobs:
     build:
@@ -43,7 +44,7 @@ jobs:
             
             - name: Build JSON Schema
               run: |
-                poetry run python configschema/main.py
+                poetry run python jsonSchemas/main.py
             - name: Generate A Release
               uses: softprops/action-gh-release@v2
               with:
