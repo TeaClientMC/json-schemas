@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "configschema"
+name = "jsonSchemas"
 version = "0.1.0"
 description = "A ConfigSchema Generator for TeaClient"
 authors = ["eveeifyeve <eveeg1971@gmail.com>"]
@@ -7,7 +7,7 @@ license = "BSD-3"
 readme = "README.md"
 
 [tool.poetry.scripts]
-configschema = "configschema.main:main"
+configschema = "jsonSchemas.main:main"
 
 [tool.poetry.dependencies]
 python = "^3.12"
