@@ -10,7 +10,7 @@ import hashlib
 def proccess_command(command, check_call=False):
     shell = ["sh", "-c", command]
     try:
-        if check_call == True:
+        if check_call is True:
             subprocess.check_call(shell)
         else:
             subprocess.run(shell)
