@@ -6,16 +6,33 @@ import json
 import hashlib
 
 
+def proccess_command(command, check_call=False):
+    shell = ["sh", "-c", command]
+    try:
+        if check_call == True:
+            subprocess.check_call(shell)
+        else:
+            subprocess.run(shell)
+    except Exception as e:
+        print(
+            "An unexpected error occurred while running the command: {} error: {}".format(
+                command, e
+            )
+        )
+
+
+# Main function to generate JSON schemas and SHA256 hashes and output them to the ./dist directory
 def main():
     try:
-        subprocess.check_call(["sh", "-c", f"rm -rf ./dist"])
-        subprocess.check_call(["sh", "-c", f"rm -rf ./dist/shas"])
-        subprocess.run(["sh", "-c", f"mkdir -p ./dist"])
-        subprocess.run(["sh", "-c", f"mkdir -p ./dist/shas"])
+        proccess_command("rm -rf ./dist", check_call=True)
+        proccess_command("rm -rf ./dist/shas", check_call=True)
+        proccess_command("mkdir -p ./dist", check_call=False)
+        proccess_command("mkdir -p ./dist/shas", check_call=False)
         input_dir = "./jsonSchemas/examples"
 
         # Get all JSON files from the examples directory
         input_files = glob.glob(f"{input_dir}/*.json")
+
         # Generate output filenames by replacing '.json' with 'Schema.json'
         output_files = [
             f"{os.path.splitext(os.path.basename(file))[0]}Schema"
@@ -31,6 +48,7 @@ def main():
         print(f"An unexpected error occurred: {e}")
 
 
+# Generates a SHA256 hash for a given file
 def ShaHashGenerator(input_file, output_file):
     with open(input_file, "rb") as f:
         sha256_hash = hashlib.sha256(f.read()).hexdigest()
@@ -39,6 +57,7 @@ def ShaHashGenerator(input_file, output_file):
         f.write(sha256_hash)
 
 
+# Generates a JSON schema from a given JSON file
 def genSchemaFromJsonFile(inputFile, outputFile):
     builder = SchemaBuilder()
     json_file_path = inputFile
