@@ -6,6 +6,7 @@ import json
 import hashlib
 
 
+# A function to run commands eaiser by using a function
 def proccess_command(command, check_call=False):
     shell = ["sh", "-c", command]
     try:
