@@ -27,8 +27,8 @@ def main():
     try:
         proccess_command("rm -rf ./dist", check_call=True)
         proccess_command("rm -rf ./dist/shas", check_call=True)
-        proccess_command("mkdir -p ./dist", check_call=False)
-        proccess_command("mkdir -p ./dist/shas", check_call=False)
+        proccess_command("mkdir -p ./dist")
+        proccess_command("mkdir -p ./dist/shas")
         input_dir = "./jsonSchemas/examples"
 
         # Get all JSON files from the examples directory
