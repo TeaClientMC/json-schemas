@@ -23,9 +23,9 @@
             dotenv.enable = true;
             packages = with pkgs; [
               stdenv.cc.cc.lib # required by Jupyter
+              ruff
               (pkgs.python3.withPackages (python-pkgs: with python-pkgs; [
                 python-lsp-server
-                black
                 mypy
                 isort
               ]))
