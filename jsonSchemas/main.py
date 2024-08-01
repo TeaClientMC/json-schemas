@@ -5,6 +5,8 @@ from genson import SchemaBuilder
 import json
 import hashlib
 
+ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
+
 
 # A function to run commands eaiser by using a function
 def proccess_command(command, check_call=False):
@@ -29,7 +31,7 @@ def main():
         proccess_command("rm -rf ./dist/shas", check_call=True)
         proccess_command("mkdir -p ./dist")
         proccess_command("mkdir -p ./dist/shas")
-        input_dir = "./jsonSchemas/examples"
+        input_dir = f"{ROOT_DIR}/examples"
 
         # Get all JSON files from the examples directory
         input_files = glob.glob(f"{input_dir}/*.json")
@@ -43,7 +45,8 @@ def main():
         for input_file, output_file in zip(input_files, output_files):
             genSchemaFromJsonFile(input_file, output_file + ".json")
             ShaHashGenerator(
-                f"./dist/{output_file}.json", f"./dist/shas/{output_file}.json.sha256"
+                f"${ROOT_DIR}/dist/{output_file}.json",
+                f"${ROOT_DIR}/dist/shas/{output_file}.json.sha256",
             )
     except Exception as e:
         print(f"An unexpected error occurred: {e}")
