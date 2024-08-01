@@ -5,8 +5,6 @@ from genson import SchemaBuilder
 import json
 import hashlib
 
-ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
-
 
 # A function to run commands eaiser by using a function
 def proccess_command(command, check_call=False):
@@ -24,13 +22,16 @@ def proccess_command(command, check_call=False):
         )
 
 
+ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
+
+
 # Main function to generate JSON schemas and SHA256 hashes and output them to the ./dist directory
 def main():
     try:
-        proccess_command("rm -rf ./dist", check_call=True)
-        proccess_command("rm -rf ./dist/shas", check_call=True)
-        proccess_command("mkdir -p ./dist")
-        proccess_command("mkdir -p ./dist/shas")
+        proccess_command(f"rm -rf {ROOT_DIR}/dist", check_call=True)
+        proccess_command(f"rm -rf {ROOT_DIR}/shas", check_call=True)
+        proccess_command(f"mkdir -p {ROOT_DIR}/dist")
+        proccess_command(f"mkdir -p {ROOT_DIR}/dist/shas")
         input_dir = f"{ROOT_DIR}/examples"
 
         # Get all JSON files from the examples directory
@@ -45,8 +46,8 @@ def main():
         for input_file, output_file in zip(input_files, output_files):
             genSchemaFromJsonFile(input_file, output_file + ".json")
             ShaHashGenerator(
-                f"${ROOT_DIR}/dist/{output_file}.json",
-                f"${ROOT_DIR}/dist/shas/{output_file}.json.sha256",
+                f"{ROOT_DIR}/dist/{output_file}.json",
+                f"{ROOT_DIR}/dist/shas/{output_file}.json.sha256",
             )
     except Exception as e:
         print(f"An unexpected error occurred: {e}")
@@ -73,7 +74,7 @@ def genSchemaFromJsonFile(inputFile, outputFile):
         builder.add_object(data)
         builder.to_schema()
         schema = builder.to_json(indent=2)
-        subprocess.run(["sh", "-c", f"echo '{schema}' > ./dist/{outputFile}"])
+        subprocess.run(["sh", "-c", f"echo '{schema}' > {ROOT_DIR}/dist/{outputFile}"])
         print("Schema generated successfully!")
     except FileNotFoundError:
         print(f"The file {json_file_path} was not found.")
