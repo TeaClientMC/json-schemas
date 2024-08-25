@@ -47,8 +47,9 @@ jobs:
                 poetry run python jsonSchemas/main.py
             - name: Compress Sha256 Hashes to Zip & Tar
               run: |
-                    zip -r jsonSchemas/dist/shas.zip dist/shas
-                    tar -czvf jsonSchemas/dist/shas.tar.gz dist/shas
+                    zip -r jsonSchemas/dist/shas.zip jsonSchemas/dist/shas
+                    tar -czvf jsonSchemas/dist/shas.tar.gz jsonSchemas/dist/shas
+                    rm -rf jsonSchemas/dist/shas
             - name: Generate A Release
               uses: softprops/action-gh-release@v2
               with:
