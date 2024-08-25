@@ -4,7 +4,6 @@ dist
 # nix 
 ./result
 .direnv
-.devenv
 
 
 # macOS specific files

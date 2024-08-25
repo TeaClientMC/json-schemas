@@ -1,45 +1,41 @@
 {
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-    devenv.url = "github:cachix/devenv";
+    flake-parts.url = "github:hercules-ci/flake-parts";
+    agenix-shell.url = "github:aciceri/agenix-shell";
   };
 
-  outputs =
-    inputs@{ flake-parts, nixpkgs, ... }:
-    flake-parts.lib.mkFlake { inherit inputs; } {
-      imports = [ inputs.devenv.flakeModule ];
+  outputs = inputs@{ self, nixpkgs, flake-parts, agenix-shell, ... }:
+    flake-parts.lib.mkFlake {inherit inputs;} {
       systems = nixpkgs.lib.systems.flakeExposed;
-      perSystem =
+
+      imports = [
+        # agenix-shell.flakeModules.default
+      ];
+
+      # agenix-shell = {
+      #   secrets = {
+      #     foo.file = ./secrets/foo.age;
+      #   };
+      # };
+
+      perSystem = {
+        pkgs,
+        config,
+        lib,
+        ...
+      }: 
+      let
+        inherit (pkgs.darwin.apple_sdk.frameworks) CoreFoundation;
+      in
+      {
+        devShells.default = pkgs.mkShell
         {
-          config,
-          self',
-          inputs',
-          pkgs,
-          system,
-          ...
-        }:
-        {
-          devenv.shells.default = {
-            dotenv.enable = true;
-            packages = with pkgs; [
-              stdenv.cc.cc.lib # required by Jupyter
-              ruff
-              (pkgs.python3.withPackages (python-pkgs: with python-pkgs; [
-                python-lsp-server
-                mypy
-                isort
-              ]))
-            ];
-            languages.python = {
-              enable = true;
-              poetry = {
-                enable = true;
-                activate.enable = true;
-                install.enable = true;
-                install.allExtras = true;
-              };
-            };
-          };
+          packages = with pkgs; [
+            poetry
+          ];
+
         };
+      };
     };
 }
